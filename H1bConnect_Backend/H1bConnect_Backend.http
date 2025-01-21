@@ -1,0 +1,6 @@
+@H1bConnect_Backend_HostAddress = http://localhost:5157
+
+GET {{H1bConnect_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
