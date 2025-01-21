@@ -36,7 +36,6 @@ namespace H1bConnect_Backend.Repository.Services
 
         public async Task<int?> GetLatestResourceIdAsync()
         {
-            // Find the resource with the highest ResourceID
             var latestResource = await _resourceCollection
                 .Find(FilterDefinition<ResourceDetails>.Empty)
                 .SortByDescending(r => r.ResourceID)
@@ -114,12 +113,10 @@ namespace H1bConnect_Backend.Repository.Services
         {
             var filter = Builders<ResourceDetails>.Filter.Eq(r => r.ResourceID, resourceId);
 
-            // Delete the resource
             var result = await _resourceCollection.DeleteOneAsync(filter);
 
             if (result.DeletedCount > 0)
             {
-                // Decrement the counter
                 await _counterService.DecrementCounter("ResourceDetails");
                 return true;
             }
@@ -127,7 +124,6 @@ namespace H1bConnect_Backend.Repository.Services
             return false;
         }
 
-        // Resource Search and Retrieval
         public async Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, string userType, int yearOfFiling)
         {
             var filters = new List<FilterDefinition<ResourceDetails>>();
@@ -150,12 +146,12 @@ namespace H1bConnect_Backend.Repository.Services
 
             if (!string.IsNullOrWhiteSpace(userType))
             {
-                filters.Add(builder.Eq(r => r.UserType, userType)); // Add userType filter
+                filters.Add(builder.Eq(r => r.UserType, userType)); 
             }
 
             if (yearOfFiling > 0)
             {
-                filters.Add(builder.Eq(r => r.YearOfFiling, yearOfFiling)); // Add yearOfFiling filter
+                filters.Add(builder.Eq(r => r.YearOfFiling, yearOfFiling)); 
             }
 
             var combinedFilter = filters.Count > 0 ? builder.And(filters) : builder.Empty;
@@ -172,7 +168,6 @@ namespace H1bConnect_Backend.Repository.Services
         }
 
 
-        // Status Management
         public async Task<List<StatusDetails>> GetStatusOfResourceAsync(int resourceId)
         {
             var resource = await GetResourceByIdAsync(resourceId);
@@ -196,21 +191,17 @@ namespace H1bConnect_Backend.Repository.Services
 
         public async Task<bool> UpdateResourceNotesAsync(int resourceId, ResourceNotes newNote)
         {
-            // Check if ResourceNotes is null and initialize it if needed
             var filter = Builders<ResourceDetails>.Filter.Eq(r => r.ResourceID, resourceId);
 
-            // Initialize ResourceNotes if it doesn't exist
             var initializeNotes = Builders<ResourceDetails>.Update.Set(r => r.ResourceNotes, new List<ResourceNotes>());
             var initializeResult = await _resourceCollection.UpdateOneAsync(
                 filter & Builders<ResourceDetails>.Filter.Eq(r => r.ResourceNotes, null),
                 initializeNotes
             );
 
-            // Push the new note to ResourceNotes
             var pushNote = Builders<ResourceDetails>.Update.Push(r => r.ResourceNotes, newNote);
             var pushResult = await _resourceCollection.UpdateOneAsync(filter, pushNote);
 
-            // Return true if either the initialization or the push was successful
             return initializeResult.MatchedCount > 0 || pushResult.MatchedCount > 0;
         }
 
@@ -220,17 +211,14 @@ namespace H1bConnect_Backend.Repository.Services
             var builder = Builders<ResourceDetails>.Filter;
             var filters = new List<FilterDefinition<ResourceDetails>>();
 
-            // Filter by userType
             if (!string.IsNullOrWhiteSpace(userType))
                 filters.Add(builder.Eq(r => r.UserType, userType));
 
-            // Filter by yearOfFiling if provided
             if (yearOfFiling.HasValue)
                 filters.Add(builder.Eq(r => r.YearOfFiling, yearOfFiling.Value));
 
             var allResources = await _resourceCollection.Find(builder.And(filters)).ToListAsync();
 
-            // Further filter resources by most recent status
             var filteredResources = allResources
                 .Where(resource =>
                     resource.StatusDetails != null &&
@@ -252,7 +240,6 @@ namespace H1bConnect_Backend.Repository.Services
                 throw new KeyNotFoundException($"Resource with ID {resourceId} not found.");
             }
 
-            // Ensure the field is an array before applying $pull
             switch (fileType)
             {
                 case "resume":
@@ -307,13 +294,11 @@ namespace H1bConnect_Backend.Repository.Services
                 await _resourceCollection.UpdateOneAsync(r => r.ResourceID == resourceId, cleanupUpdate);
             }
 
-            // Upload files and add their IDs to the corresponding field
             foreach (var file in files)
             {
                 using var stream = file.OpenReadStream();
                 var fileId = await _gridFsBucket.UploadFromStreamAsync(file.FileName, stream);
 
-                // Add the file ID to the appropriate list
                 var update = fileType switch
                 {
                     "resume" => Builders<ResourceDetails>.Update.AddToSet(r => r.ResumeUploads, fileId.ToString()),
@@ -345,7 +330,7 @@ namespace H1bConnect_Backend.Repository.Services
             var fileStream = new MemoryStream();
             await _gridFsBucket.DownloadToStreamAsync(objectId, fileStream);
 
-            fileStream.Position = 0; // Reset stream position for reading
+            fileStream.Position = 0; 
             return fileStream;
         }
 
