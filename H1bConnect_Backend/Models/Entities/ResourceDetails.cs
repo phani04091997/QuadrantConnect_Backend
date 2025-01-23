@@ -22,7 +22,7 @@ namespace H1bConnect_Backend.Models.Entities
         public string PhoneNumber { get; set; }
         public string CountryOfOrigin { get; set; }
         public string UserType { get; set; }
-        public string WorkStatus { get; set; }
+        public string WorkStatus { get; set; }//k
         public int YearOfFiling { get; set; }
         public List<EducationDetails> EducationDetails { get; set; } = new();
         public List<JobDetails> JobDetails { get; set; } = new();
