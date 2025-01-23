@@ -70,6 +70,7 @@ namespace H1bConnect_Backend.Repository.Services
                 .Set(r => r.PhoneNumber, resourceDto.PhoneNumber)
                 .Set(r => r.CountryOfOrigin, resourceDto.CountryOfOrigin)
                 .Set(r => r.UserType, resourceDto.UserType)
+                .Set(r => r.WorkStatus, resourceDto.WorkStatus)
                 .Set(r => r.YearOfFiling, resourceDto.YearOfFiling)
                 .Set(r => r.JoiningDate, resourceDto.JoiningDate)
                 .Set(r => r.ExitDate, resourceDto.ExitDate)

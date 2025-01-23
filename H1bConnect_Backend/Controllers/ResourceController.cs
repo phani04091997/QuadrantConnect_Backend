@@ -75,6 +75,7 @@ namespace H1bConnect_Backend.Controllers
                     PhoneNumber = resourceDetails.PhoneNumber,
                     CountryOfOrigin = resourceDetails.CountryOfOrigin,
                     UserType = resourceDetails.UserType,
+                    WorkStatus = resourceDetails.WorkStatus,
                     YearOfFiling = resourceDetails.YearOfFiling,
                     EducationDetails = resourceDetails.EducationDetails,
                     JobDetails = resourceDetails.JobDetails,

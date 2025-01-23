@@ -14,7 +14,7 @@ namespace H1bConnect_Backend.Models.Entities
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string EmailID { get; set; }
-        public int ExperienceYears { get; set; }
+        public float ExperienceYears { get; set; }
         public List<string> TechnicalSkills { get; set; }
         public string KeySummary { get; set; }
         public string CurrentIndiaAddress { get; set; }
@@ -22,6 +22,7 @@ namespace H1bConnect_Backend.Models.Entities
         public string PhoneNumber { get; set; }
         public string CountryOfOrigin { get; set; }
         public string UserType { get; set; }
+        public string WorkStatus { get; set; }
         public int YearOfFiling { get; set; }
         public List<EducationDetails> EducationDetails { get; set; } = new();
         public List<JobDetails> JobDetails { get; set; } = new();
