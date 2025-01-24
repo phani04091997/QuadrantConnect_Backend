@@ -271,8 +271,8 @@ namespace H1bConnect_Backend.Controllers
             return Ok("Resource current status updated successfully.");
         }
 
-        [HttpGet("status/{statusId}/{userType}/{yearOfFiling?}")]
-        public async Task<ActionResult<List<ResourceDetails>>> GetResourcesByMostRecentStatusId(int statusId, string userType, int yearOfFiling)
+        [HttpGet("status/{statusId}/{userType}")]
+        public async Task<ActionResult<List<ResourceDetails>>> GetResourcesByMostRecentStatusId(int statusId, string userType, [FromQuery] int? yearOfFiling = null)
         {
             var resources = await _resourceService.GetResourcesByMostRecentStatusIdAsync(statusId, userType, yearOfFiling);
             if (resources == null || resources.Count == 0)
