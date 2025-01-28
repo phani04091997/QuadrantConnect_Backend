@@ -72,6 +72,8 @@ namespace H1bConnect_Backend.Repository.Services
                 .Set(r => r.UserType, resourceDto.UserType)
                 .Set(r => r.WorkStatus, resourceDto.WorkStatus)
                 .Set(r => r.YearOfFiling, resourceDto.YearOfFiling)
+                .Set(r => r.StartDate, resourceDto.StartDate)
+                .Set(r => r.EndDate, resourceDto.EndDate)
                 .Set(r => r.JoiningDate, resourceDto.JoiningDate)
                 .Set(r => r.ExitDate, resourceDto.ExitDate)
                 .Set(r => r.EducationDetails, resourceDto.EducationDetails.Select(e => new EducationDetails
@@ -99,7 +101,8 @@ namespace H1bConnect_Backend.Repository.Services
                 .Set(r => r.DepartureDate, resourceDto.DepartureDate)
                 .Set(r => r.ArrivalDate, resourceDto.ArrivalDate)
                 .Set(r => r.DepartureCity, resourceDto.DepartureCity)
-                .Set(r => r.ArrivalCity, resourceDto.ArrivalCity);
+                .Set(r => r.ArrivalCity, resourceDto.ArrivalCity)
+                .Set(r => r.ReferredBy, resourceDto.ReferredBy);
 
             var result = await _resourceCollection.UpdateOneAsync(filter, update);
 
@@ -125,7 +128,7 @@ namespace H1bConnect_Backend.Repository.Services
             return false;
         }
 
-        public async Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, string userType, int yearOfFiling)
+        public async Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, DateTime? joiningDate, string userType, int yearOfFiling)
         {
             var filters = new List<FilterDefinition<ResourceDetails>>();
             var builder = Builders<ResourceDetails>.Filter;
@@ -143,6 +146,11 @@ namespace H1bConnect_Backend.Repository.Services
             if (!string.IsNullOrWhiteSpace(skill))
             {
                 filters.Add(builder.AnyEq(r => r.TechnicalSkills, skill));
+            }
+
+            if (joiningDate.HasValue)
+            {
+                filters.Add(builder.Eq(r => r.JoiningDate, joiningDate.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(userType))

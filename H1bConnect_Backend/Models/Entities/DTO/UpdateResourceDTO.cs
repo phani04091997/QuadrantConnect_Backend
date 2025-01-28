@@ -17,6 +17,8 @@
         public string UserType { get; set; }
         public string WorkStatus { get; set; }
         public int YearOfFiling { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public DateTime? JoiningDate { get; set; }
         public DateTime? ExitDate { get; set; }
         public List<EducationDetailsDto> EducationDetails { get; set; }
@@ -27,6 +29,7 @@
         public string ArrivalCity { get; set; }
         public DateTime? DepartureDate { get; set; }
         public DateTime? ArrivalDate { get; set; }
+        public string ReferredBy { get; set; }
     }
 
     public class EducationDetailsDto

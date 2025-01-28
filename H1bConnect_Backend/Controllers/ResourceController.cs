@@ -77,10 +77,13 @@ namespace H1bConnect_Backend.Controllers
                     UserType = resourceDetails.UserType,
                     WorkStatus = resourceDetails.WorkStatus,
                     YearOfFiling = resourceDetails.YearOfFiling,
+                    StartDate = resourceDetails.StartDate,
+                    EndDate = resourceDetails.EndDate,
                     EducationDetails = resourceDetails.EducationDetails,
                     JobDetails = resourceDetails.JobDetails,
-                    StatusDetails = resourceDetails.StatusDetails
-    };
+                    StatusDetails = resourceDetails.StatusDetails,
+                    ReferredBy = resourceDetails.ReferredBy
+                };
 
                 // Save the resource details
                 await _resourceService.CreateResourceAsync(resource);
@@ -219,9 +222,9 @@ namespace H1bConnect_Backend.Controllers
 
         // Resource Search and Retrieval
         [HttpGet("search")]
-        public async Task<ActionResult<List<ResourceDetails>>> GetResourceByNameAndSkill( [FromQuery] string? firstName = null, [FromQuery] string? lastName = null, [FromQuery] string? skill = null, [FromQuery] string? userType = null, [FromQuery] int yearOfFiling = 0)
+        public async Task<ActionResult<List<ResourceDetails>>> GetResourceByNameAndSkill( [FromQuery] string? firstName = null, [FromQuery] string? lastName = null, [FromQuery] string? skill = null, [FromQuery] DateTime? joiningDate = null, [FromQuery] string? userType = null, [FromQuery] int yearOfFiling = 0)
         {
-            var resources = await _resourceService.GetResourceByNameAndSkillAsync(firstName, lastName, skill, userType, yearOfFiling);
+            var resources = await _resourceService.GetResourceByNameAndSkillAsync(firstName, lastName, skill, joiningDate, userType, yearOfFiling);
             if (resources == null || resources.Count == 0)
                 return NotFound("No resources found.");
 

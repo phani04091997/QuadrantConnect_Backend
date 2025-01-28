@@ -22,8 +22,10 @@ namespace H1bConnect_Backend.Models.Entities
         public string PhoneNumber { get; set; }
         public string CountryOfOrigin { get; set; }
         public string UserType { get; set; }
-        public string WorkStatus { get; set; }//k
+        public string WorkStatus { get; set; }
         public int YearOfFiling { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<EducationDetails> EducationDetails { get; set; } = new();
         public List<JobDetails> JobDetails { get; set; } = new();
         public List<string> ResumeUploads { get; set; }
@@ -35,6 +37,7 @@ namespace H1bConnect_Backend.Models.Entities
         public DateTime? JoiningDate { get; set; }
         public DateTime? ExitDate { get; set; }
         public List<ResourceNotes> ResourceNotes { get; set; } = new(); // Initialize as an empty list
+        public string ReferredBy { get; set; }
 
     }
 

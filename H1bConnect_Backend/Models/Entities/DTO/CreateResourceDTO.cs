@@ -18,8 +18,11 @@
         public string UserType { get; set; }
         public string WorkStatus { get; set; }
         public int YearOfFiling { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<EducationDetails> EducationDetails { get; set; } = new();
         public List<JobDetails> JobDetails { get; set; } = new();
         public List<StatusDetails> StatusDetails { get; set; } = new();
+        public string ReferredBy { get; set; }
     }
 }
