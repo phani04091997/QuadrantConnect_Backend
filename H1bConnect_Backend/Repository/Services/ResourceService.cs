@@ -2,6 +2,7 @@
 using H1bConnect_Backend.Models.Entities;
 using H1bConnect_Backend.Models.Entities.DTO;
 using H1bConnect_Backend.Repository.IServices;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using System.ComponentModel.Design;
@@ -128,29 +129,51 @@ namespace H1bConnect_Backend.Repository.Services
             return false;
         }
 
-        public async Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, DateTime? joiningDate, string userType, int yearOfFiling)
+        public async Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, DateTime? joiningDate, DateTime? startDate, DateTime? endDate, string userType, int yearOfFiling)
         {
             var filters = new List<FilterDefinition<ResourceDetails>>();
             var builder = Builders<ResourceDetails>.Filter;
 
             if (!string.IsNullOrWhiteSpace(firstName))
             {
-                filters.Add(builder.Eq(r => r.FirstName, firstName));
+                filters.Add(builder.Regex(r => r.FirstName, new BsonRegularExpression($"^{firstName}", "i")));
             }
 
             if (!string.IsNullOrWhiteSpace(lastName))
             {
-                filters.Add(builder.Eq(r => r.LastName, lastName));
+                filters.Add(builder.Regex(r => r.LastName, new BsonRegularExpression($"^{lastName}", "i")));
             }
 
             if (!string.IsNullOrWhiteSpace(skill))
             {
-                filters.Add(builder.AnyEq(r => r.TechnicalSkills, skill));
+                filters.Add(builder.ElemMatch(r => r.TechnicalSkills, skillValue => skillValue.ToLower().StartsWith(skill.ToLower())));
             }
 
             if (joiningDate.HasValue)
             {
-                filters.Add(builder.Eq(r => r.JoiningDate, joiningDate.Value));
+                var startOfMonth = new DateTime(joiningDate.Value.Year, joiningDate.Value.Month, 1);
+                var startOfNextMonth = startOfMonth.AddMonths(1);
+
+                filters.Add(builder.Gte(r => r.JoiningDate, startOfMonth));
+                filters.Add(builder.Lt(r => r.JoiningDate, startOfNextMonth));
+            }
+
+            if (startDate.HasValue)
+            {
+                var startOfMonth = new DateTime(startDate.Value.Year, startDate.Value.Month, 1);
+                var startOfNextMonth = startOfMonth.AddMonths(1);
+
+                filters.Add(builder.Gte(r => r.StartDate, startOfMonth));
+                filters.Add(builder.Lt(r => r.StartDate, startOfNextMonth));
+            }
+
+            if (endDate.HasValue)
+            {
+                var startOfMonth = new DateTime(endDate.Value.Year, endDate.Value.Month, 1);
+                var startOfNextMonth = startOfMonth.AddMonths(1);
+
+                filters.Add(builder.Gte(r => r.EndDate, startOfMonth));
+                filters.Add(builder.Lt(r => r.EndDate, startOfNextMonth));
             }
 
             if (!string.IsNullOrWhiteSpace(userType))

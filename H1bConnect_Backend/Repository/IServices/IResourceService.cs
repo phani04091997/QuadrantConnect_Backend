@@ -16,7 +16,7 @@ namespace H1bConnect_Backend.Repository.IServices
         Task<bool> DeleteResourceByIdAsync(int resourceId);  // Delete a resource by ID
 
         // Resource Search and Retrieval
-        Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, DateTime? joiningDate, string userType, int yearOfFiling);  // Find a resource by name and skill
+        Task<List<ResourceDetails>> GetResourceByNameAndSkillAsync(string firstName, string lastName, string skill, DateTime? joiningDate, DateTime? startDate, DateTime? EndDate, string userType, int yearOfFiling);  // Find a resource by name and skill
         Task<List<ResourceDetails>> GetResourceByUserTypeAsync(string userType);
 
         // Status Management

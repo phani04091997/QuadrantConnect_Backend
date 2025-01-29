@@ -222,9 +222,9 @@ namespace H1bConnect_Backend.Controllers
 
         // Resource Search and Retrieval
         [HttpGet("search")]
-        public async Task<ActionResult<List<ResourceDetails>>> GetResourceByNameAndSkill( [FromQuery] string? firstName = null, [FromQuery] string? lastName = null, [FromQuery] string? skill = null, [FromQuery] DateTime? joiningDate = null, [FromQuery] string? userType = null, [FromQuery] int yearOfFiling = 0)
+        public async Task<ActionResult<List<ResourceDetails>>> GetResourceByNameAndSkill( [FromQuery] string? firstName = null, [FromQuery] string? lastName = null, [FromQuery] string? skill = null, [FromQuery] DateTime? joiningDate = null, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null, [FromQuery] string? userType = null, [FromQuery] int yearOfFiling = 0)
         {
-            var resources = await _resourceService.GetResourceByNameAndSkillAsync(firstName, lastName, skill, joiningDate, userType, yearOfFiling);
+            var resources = await _resourceService.GetResourceByNameAndSkillAsync(firstName, lastName, skill, joiningDate, startDate, endDate, userType, yearOfFiling);
             if (resources == null || resources.Count == 0)
                 return NotFound("No resources found.");
 
